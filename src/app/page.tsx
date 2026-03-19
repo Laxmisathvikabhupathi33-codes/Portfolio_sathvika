@@ -1,10 +1,18 @@
+"use client";
+
 import type { ReactNode } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 
 function Chip({ children }: { children: ReactNode }) {
+  const reduceMotion = useReducedMotion();
   return (
-    <span className="inline-flex items-center rounded-full bg-zinc-200 px-3 py-1 text-xs font-medium text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">
+    <motion.span
+      whileHover={reduceMotion ? undefined : { y: -1, scale: 1.04 }}
+      transition={reduceMotion ? undefined : { duration: 0.18, ease: "easeOut" }}
+      className="inline-flex items-center rounded-full bg-zinc-200 px-3 py-1 text-xs font-medium text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200"
+    >
       {children}
-    </span>
+    </motion.span>
   );
 }
 
@@ -17,8 +25,15 @@ function SectionTitle({
   title: string;
   description?: string;
 }) {
+  const reduceMotion = useReducedMotion();
   return (
-    <div className="mb-8">
+    <motion.div
+      className="mb-8"
+      initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+      transition={reduceMotion ? undefined : { duration: 0.6, ease: "easeOut" }}
+      viewport={{ once: true, amount: 0.25 }}
+    >
       {kicker ? (
         <div className="text-sm font-semibold text-zinc-600 dark:text-zinc-300">
           {kicker}
@@ -32,11 +47,12 @@ function SectionTitle({
           {description}
         </p>
       ) : null}
-    </div>
+    </motion.div>
   );
 }
 
 export default function Home() {
+  const reduceMotion = useReducedMotion();
   const name = "Laxmi Sathvika Bhupathi";
   const role = "Aspiring AI Engineer";
   const phone = "+91 9059449457";
@@ -149,33 +165,90 @@ export default function Home() {
         </div>
       </header>
 
-      <main id="main" className="mx-auto max-w-5xl px-4 py-12 sm:py-16">
-        <section className="grid gap-10 lg:grid-cols-12 lg:items-center">
+      <main id="main" className="relative mx-auto max-w-5xl px-4 py-12 sm:py-16">
+        {/* Animated background accents (kept subtle) */}
+        <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+          <motion.div
+            aria-hidden="true"
+            className="absolute -left-24 top-10 h-72 w-72 rounded-full bg-emerald-400/15 blur-3xl"
+            animate={
+              reduceMotion
+                ? undefined
+                : { y: [0, 18, 0], opacity: [0.75, 1, 0.75] }
+            }
+            transition={
+              reduceMotion
+                ? undefined
+                : { duration: 7, repeat: Infinity, ease: "easeInOut" }
+            }
+          />
+          <motion.div
+            aria-hidden="true"
+            className="absolute -right-28 top-24 h-80 w-80 rounded-full bg-indigo-400/15 blur-3xl"
+            animate={
+              reduceMotion
+                ? undefined
+                : { y: [0, -16, 0], opacity: [0.6, 1, 0.6] }
+            }
+            transition={
+              reduceMotion
+                ? undefined
+                : { duration: 8.5, repeat: Infinity, ease: "easeInOut" }
+            }
+          />
+        </div>
+
+        <motion.section
+          className="grid gap-10 lg:grid-cols-12 lg:items-center"
+          initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+          animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+          transition={reduceMotion ? undefined : { duration: 0.65, ease: "easeOut" }}
+        >
           <div className="lg:col-span-7">
             <div className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800">
               <span className="h-2 w-2 rounded-full bg-emerald-500" />
               Available for internships / opportunities
             </div>
             <h1 className="mt-5 text-4xl font-semibold tracking-tight sm:text-5xl">
-              {role} <span className="text-zinc-600 dark:text-zinc-300">building AI + full-stack systems</span>
+              {role}{" "}
+              <motion.span
+                className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 via-indigo-500 to-fuchsia-500 dark:from-emerald-300 dark:via-indigo-300 dark:to-fuchsia-300"
+                style={{ backgroundSize: "200% 100%" }}
+                animate={
+                  reduceMotion
+                    ? undefined
+                    : { backgroundPosition: ["0% 50%", "100% 50%"] }
+                }
+                transition={
+                  reduceMotion
+                    ? undefined
+                    : { duration: 3.5, repeat: Infinity, ease: "linear" }
+                }
+              >
+                building AI + full-stack systems
+              </motion.span>
             </h1>
             <p className="mt-5 max-w-2xl text-lg leading-relaxed text-zinc-700 dark:text-zinc-200">
               {summary}
             </p>
 
             <div className="mt-7 flex flex-wrap gap-3">
-              <a
+              <motion.a
                 className="inline-flex h-11 items-center justify-center rounded-full bg-zinc-900 px-5 text-sm font-semibold text-white transition hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white"
                 href="#projects"
+                whileHover={reduceMotion ? undefined : { y: -2, scale: 1.02 }}
+                transition={reduceMotion ? undefined : { type: "spring", stiffness: 260, damping: 20 }}
               >
                 View Projects
-              </a>
-              <a
+              </motion.a>
+              <motion.a
                 className="inline-flex h-11 items-center justify-center rounded-full border border-zinc-200 bg-white px-5 text-sm font-semibold text-zinc-900 transition hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800"
                 href={`mailto:${email}?subject=Portfolio%20Inquiry`}
+                whileHover={reduceMotion ? undefined : { y: -2, scale: 1.02 }}
+                transition={reduceMotion ? undefined : { type: "spring", stiffness: 260, damping: 20 }}
               >
                 Email Me
-              </a>
+              </motion.a>
             </div>
 
             <div className="mt-8 flex flex-wrap gap-4 text-sm text-zinc-700 dark:text-zinc-200">
@@ -202,7 +275,11 @@ export default function Home() {
           </div>
 
           <div className="lg:col-span-5">
-            <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800">
+            <motion.div
+              className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800"
+              whileHover={reduceMotion ? undefined : { y: -4, scale: 1.01 }}
+              transition={reduceMotion ? undefined : { type: "spring", stiffness: 260, damping: 22 }}
+            >
               <SectionTitle
                 kicker="At a glance"
                 title="What I’m working on"
@@ -219,9 +296,9 @@ export default function Home() {
               <div className="mt-6 text-sm text-zinc-700 dark:text-zinc-200">
                 Currently focused on model optimization, data pipelines, and building production-ready backends.
               </div>
-            </div>
+            </motion.div>
           </div>
-        </section>
+        </motion.section>
 
         <section id="about" className="mt-16">
           <SectionTitle
@@ -231,7 +308,14 @@ export default function Home() {
           />
 
           <div className="grid gap-6 lg:grid-cols-2">
-            <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800">
+            <motion.div
+              className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800"
+              whileHover={reduceMotion ? undefined : { y: -4, scale: 1.01 }}
+              transition={reduceMotion ? undefined : { type: "spring", stiffness: 260, damping: 22 }}
+              initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+              whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+            >
               <h3 className="text-lg font-semibold">B.Tech in Computer Science & Engineering (AI & ML)</h3>
               <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
                 Sumathi Reddy Institute of Technology for Women, Warangal, India
@@ -244,9 +328,16 @@ export default function Home() {
                   <Chip key={c}>{c}</Chip>
                 ))}
               </div>
-            </div>
+            </motion.div>
 
-            <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800">
+            <motion.div
+              className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800"
+              whileHover={reduceMotion ? undefined : { y: -4, scale: 1.01 }}
+              transition={reduceMotion ? undefined : { type: "spring", stiffness: 260, damping: 22 }}
+              initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+              whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+            >
               <h3 className="text-lg font-semibold">Certifications</h3>
               <div className="mt-4 space-y-4">
                 {certifications.map((cert) => (
@@ -261,7 +352,7 @@ export default function Home() {
               <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-300">
                 These focused programs reinforced practical concepts in modern AI and generative AI.
               </p>
-            </div>
+            </motion.div>
           </div>
         </section>
 
@@ -273,38 +364,66 @@ export default function Home() {
           />
 
           <div className="grid gap-6 lg:grid-cols-2">
-            <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800">
+            <motion.div
+              className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800"
+              whileHover={reduceMotion ? undefined : { y: -4, scale: 1.01 }}
+              transition={reduceMotion ? undefined : { type: "spring", stiffness: 260, damping: 22 }}
+              initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+              whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+            >
               <h3 className="text-lg font-semibold">Programming Languages</h3>
               <div className="mt-4 flex flex-wrap gap-2">
                 {skills.languages.map((s) => (
                   <Chip key={s}>{s}</Chip>
                 ))}
               </div>
-            </div>
-            <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800">
+            </motion.div>
+            <motion.div
+              className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800"
+              whileHover={reduceMotion ? undefined : { y: -4, scale: 1.01 }}
+              transition={reduceMotion ? undefined : { type: "spring", stiffness: 260, damping: 22 }}
+              initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+              whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+            >
               <h3 className="text-lg font-semibold">Web Development</h3>
               <div className="mt-4 flex flex-wrap gap-2">
                 {skills.web.map((s) => (
                   <Chip key={s}>{s}</Chip>
                 ))}
               </div>
-            </div>
-            <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800">
+            </motion.div>
+            <motion.div
+              className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800"
+              whileHover={reduceMotion ? undefined : { y: -4, scale: 1.01 }}
+              transition={reduceMotion ? undefined : { type: "spring", stiffness: 260, damping: 22 }}
+              initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+              whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+            >
               <h3 className="text-lg font-semibold">Core CS</h3>
               <div className="mt-4 flex flex-wrap gap-2">
                 {skills.coreCS.map((s) => (
                   <Chip key={s}>{s}</Chip>
                 ))}
               </div>
-            </div>
-            <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800">
+            </motion.div>
+            <motion.div
+              className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800"
+              whileHover={reduceMotion ? undefined : { y: -4, scale: 1.01 }}
+              transition={reduceMotion ? undefined : { type: "spring", stiffness: 260, damping: 22 }}
+              initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+              whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+            >
               <h3 className="text-lg font-semibold">Databases & Tools</h3>
               <div className="mt-4 flex flex-wrap gap-2">
                 {[...skills.databases, ...skills.tools].map((s) => (
                   <Chip key={s}>{s}</Chip>
                 ))}
               </div>
-            </div>
+            </motion.div>
           </div>
         </section>
 
@@ -317,9 +436,14 @@ export default function Home() {
 
           <div className="grid gap-6">
             {projects.map((p) => (
-              <article
+              <motion.article
                 key={p.title}
                 className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800"
+                whileHover={reduceMotion ? undefined : { y: -6, scale: 1.015 }}
+                transition={reduceMotion ? undefined : { type: "spring", stiffness: 260, damping: 22 }}
+                initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+                whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.25 }}
               >
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                   <div>
@@ -346,7 +470,7 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-              </article>
+              </motion.article>
             ))}
           </div>
         </section>
@@ -358,7 +482,14 @@ export default function Home() {
             description="Open to opportunities and collaborations."
           />
 
-          <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800">
+          <motion.div
+            className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800"
+            whileHover={reduceMotion ? undefined : { y: -4, scale: 1.01 }}
+            transition={reduceMotion ? undefined : { type: "spring", stiffness: 260, damping: 22 }}
+            initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+            whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+          >
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <div className="text-sm font-medium text-zinc-600 dark:text-zinc-300">Email</div>
@@ -368,31 +499,37 @@ export default function Home() {
                 <div className="mt-1 text-sm text-zinc-600 dark:text-zinc-300">{phone} • {location}</div>
               </div>
               <div className="flex flex-wrap gap-3">
-                <a
+                <motion.a
                   className="inline-flex h-11 items-center justify-center rounded-full bg-zinc-900 px-5 text-sm font-semibold text-white transition hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white"
                   href={`mailto:${email}?subject=Portfolio%20Inquiry`}
+                  whileHover={reduceMotion ? undefined : { y: -2, scale: 1.02 }}
+                  transition={reduceMotion ? undefined : { type: "spring", stiffness: 260, damping: 20 }}
                 >
                   Send Email
-                </a>
-                <a
+                </motion.a>
+                <motion.a
                   className="inline-flex h-11 items-center justify-center rounded-full border border-zinc-200 bg-white px-5 text-sm font-semibold text-zinc-900 transition hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800"
                   href={githubUrl}
                   target="_blank"
                   rel="noreferrer"
+                  whileHover={reduceMotion ? undefined : { y: -2, scale: 1.02 }}
+                  transition={reduceMotion ? undefined : { type: "spring", stiffness: 260, damping: 20 }}
                 >
                   GitHub
-                </a>
-                <a
+                </motion.a>
+                <motion.a
                   className="inline-flex h-11 items-center justify-center rounded-full border border-zinc-200 bg-white px-5 text-sm font-semibold text-zinc-900 transition hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800"
                   href={linkedinUrl}
                   target="_blank"
                   rel="noreferrer"
+                  whileHover={reduceMotion ? undefined : { y: -2, scale: 1.02 }}
+                  transition={reduceMotion ? undefined : { type: "spring", stiffness: 260, damping: 20 }}
                 >
                   LinkedIn
-                </a>
+                </motion.a>
               </div>
             </div>
-          </div>
+          </motion.div>
         </section>
       </main>
 
