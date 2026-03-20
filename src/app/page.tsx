@@ -1,7 +1,8 @@
 "use client";
 
-import type { ReactNode } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import type { ComponentPropsWithoutRef, PointerEvent, ReactNode } from "react";
+import { useRef } from "react";
+import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
 
 function Chip({ children }: { children: ReactNode }) {
   const reduceMotion = useReducedMotion();
@@ -51,11 +52,67 @@ function SectionTitle({
   );
 }
 
+function TiltCard({
+  className,
+  children,
+  style,
+  ...props
+}: ComponentPropsWithoutRef<typeof motion.div>) {
+  const reduceMotion = useReducedMotion();
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  const rotateX = useMotionValue(0);
+  const rotateY = useMotionValue(0);
+  const rotateXSpring = useSpring(rotateX, { stiffness: 220, damping: 18 });
+  const rotateYSpring = useSpring(rotateY, { stiffness: 220, damping: 18 });
+
+  const handlePointerMove = (e: PointerEvent<HTMLDivElement>) => {
+    if (reduceMotion) return;
+    if (!ref.current) return;
+
+    const rect = ref.current.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width; // 0..1
+    const py = (e.clientY - rect.top) / rect.height; // 0..1
+
+    // Convert to centered range (-0.5..0.5) then map to degrees.
+    const dx = (px - 0.5) * 2;
+    const dy = (py - 0.5) * 2;
+    const maxTiltDeg = 10;
+
+    rotateY.set(dx * maxTiltDeg);
+    rotateX.set(-dy * maxTiltDeg);
+  };
+
+  const handlePointerLeave = () => {
+    if (reduceMotion) return;
+    rotateX.set(0);
+    rotateY.set(0);
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      onPointerMove={handlePointerMove}
+      onPointerLeave={handlePointerLeave}
+      className={className}
+      style={{
+        transformStyle: "preserve-3d",
+        perspective: "900px",
+        rotateX: rotateXSpring,
+        rotateY: rotateYSpring,
+        ...style,
+      }}
+      {...props}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 export default function Home() {
   const reduceMotion = useReducedMotion();
   const name = "Laxmi Sathvika Bhupathi";
   const role = "Aspiring AI Engineer";
-  const phone = "+91 9059449457";
   const email = "sathvikabhupathi33@gmail.com";
   const location = "Mahabubabad, Telangana, India";
 
@@ -253,8 +310,13 @@ export default function Home() {
 
             <div className="mt-8 flex flex-wrap gap-4 text-sm text-zinc-700 dark:text-zinc-200">
               <div>
-                <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">Phone</div>
-                <a className="font-semibold hover:underline" href={`tel:${phone}`}>{phone}</a>
+                <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">Email</div>
+                <a
+                  className="font-semibold hover:underline"
+                  href={`mailto:${email}?subject=Portfolio%20Inquiry`}
+                >
+                  {email}
+                </a>
               </div>
               <div>
                 <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">Location</div>
@@ -275,8 +337,8 @@ export default function Home() {
           </div>
 
           <div className="lg:col-span-5">
-            <motion.div
-              className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800"
+            <TiltCard
+              className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800 relative overflow-hidden"
               whileHover={reduceMotion ? undefined : { y: -4, scale: 1.01 }}
               transition={reduceMotion ? undefined : { type: "spring", stiffness: 260, damping: 22 }}
             >
@@ -296,7 +358,7 @@ export default function Home() {
               <div className="mt-6 text-sm text-zinc-700 dark:text-zinc-200">
                 Currently focused on model optimization, data pipelines, and building production-ready backends.
               </div>
-            </motion.div>
+            </TiltCard>
           </div>
         </motion.section>
 
@@ -308,8 +370,8 @@ export default function Home() {
           />
 
           <div className="grid gap-6 lg:grid-cols-2">
-            <motion.div
-              className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800"
+            <TiltCard
+              className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800 relative overflow-hidden"
               whileHover={reduceMotion ? undefined : { y: -4, scale: 1.01 }}
               transition={reduceMotion ? undefined : { type: "spring", stiffness: 260, damping: 22 }}
               initial={reduceMotion ? false : { opacity: 0, y: 16 }}
@@ -328,10 +390,10 @@ export default function Home() {
                   <Chip key={c}>{c}</Chip>
                 ))}
               </div>
-            </motion.div>
+            </TiltCard>
 
-            <motion.div
-              className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800"
+            <TiltCard
+              className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800 relative overflow-hidden"
               whileHover={reduceMotion ? undefined : { y: -4, scale: 1.01 }}
               transition={reduceMotion ? undefined : { type: "spring", stiffness: 260, damping: 22 }}
               initial={reduceMotion ? false : { opacity: 0, y: 16 }}
@@ -352,7 +414,7 @@ export default function Home() {
               <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-300">
                 These focused programs reinforced practical concepts in modern AI and generative AI.
               </p>
-            </motion.div>
+            </TiltCard>
           </div>
         </section>
 
@@ -364,8 +426,8 @@ export default function Home() {
           />
 
           <div className="grid gap-6 lg:grid-cols-2">
-            <motion.div
-              className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800"
+            <TiltCard
+              className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800 relative overflow-hidden"
               whileHover={reduceMotion ? undefined : { y: -4, scale: 1.01 }}
               transition={reduceMotion ? undefined : { type: "spring", stiffness: 260, damping: 22 }}
               initial={reduceMotion ? false : { opacity: 0, y: 16 }}
@@ -378,9 +440,9 @@ export default function Home() {
                   <Chip key={s}>{s}</Chip>
                 ))}
               </div>
-            </motion.div>
-            <motion.div
-              className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800"
+            </TiltCard>
+            <TiltCard
+              className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800 relative overflow-hidden"
               whileHover={reduceMotion ? undefined : { y: -4, scale: 1.01 }}
               transition={reduceMotion ? undefined : { type: "spring", stiffness: 260, damping: 22 }}
               initial={reduceMotion ? false : { opacity: 0, y: 16 }}
@@ -393,9 +455,9 @@ export default function Home() {
                   <Chip key={s}>{s}</Chip>
                 ))}
               </div>
-            </motion.div>
-            <motion.div
-              className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800"
+            </TiltCard>
+            <TiltCard
+              className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800 relative overflow-hidden"
               whileHover={reduceMotion ? undefined : { y: -4, scale: 1.01 }}
               transition={reduceMotion ? undefined : { type: "spring", stiffness: 260, damping: 22 }}
               initial={reduceMotion ? false : { opacity: 0, y: 16 }}
@@ -408,9 +470,9 @@ export default function Home() {
                   <Chip key={s}>{s}</Chip>
                 ))}
               </div>
-            </motion.div>
-            <motion.div
-              className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800"
+            </TiltCard>
+            <TiltCard
+              className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800 relative overflow-hidden"
               whileHover={reduceMotion ? undefined : { y: -4, scale: 1.01 }}
               transition={reduceMotion ? undefined : { type: "spring", stiffness: 260, damping: 22 }}
               initial={reduceMotion ? false : { opacity: 0, y: 16 }}
@@ -423,7 +485,7 @@ export default function Home() {
                   <Chip key={s}>{s}</Chip>
                 ))}
               </div>
-            </motion.div>
+            </TiltCard>
           </div>
         </section>
 
@@ -436,9 +498,9 @@ export default function Home() {
 
           <div className="grid gap-6">
             {projects.map((p) => (
-              <motion.article
+              <TiltCard
                 key={p.title}
-                className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800"
+                className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800 relative overflow-hidden"
                 whileHover={reduceMotion ? undefined : { y: -6, scale: 1.015 }}
                 transition={reduceMotion ? undefined : { type: "spring", stiffness: 260, damping: 22 }}
                 initial={reduceMotion ? false : { opacity: 0, y: 16 }}
@@ -470,7 +532,7 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-              </motion.article>
+              </TiltCard>
             ))}
           </div>
         </section>
@@ -482,8 +544,8 @@ export default function Home() {
             description="Open to opportunities and collaborations."
           />
 
-          <motion.div
-            className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800"
+          <TiltCard
+            className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800 relative overflow-hidden"
             whileHover={reduceMotion ? undefined : { y: -4, scale: 1.01 }}
             transition={reduceMotion ? undefined : { type: "spring", stiffness: 260, damping: 22 }}
             initial={reduceMotion ? false : { opacity: 0, y: 16 }}
@@ -496,7 +558,7 @@ export default function Home() {
                 <a className="mt-1 block text-lg font-semibold hover:underline" href={`mailto:${email}?subject=Portfolio%20Inquiry`}>
                   {email}
                 </a>
-                <div className="mt-1 text-sm text-zinc-600 dark:text-zinc-300">{phone} • {location}</div>
+                <div className="mt-1 text-sm text-zinc-600 dark:text-zinc-300">{location}</div>
               </div>
               <div className="flex flex-wrap gap-3">
                 <motion.a
@@ -529,7 +591,7 @@ export default function Home() {
                 </motion.a>
               </div>
             </div>
-          </motion.div>
+          </TiltCard>
         </section>
       </main>
 
