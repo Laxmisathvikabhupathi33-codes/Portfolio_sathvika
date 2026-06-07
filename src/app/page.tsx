@@ -148,29 +148,30 @@ export default function Home() {
       dates: "May 2025 - Jun 2025",
       repoUrl: "https://github.com/Laxmisathvikabhupathi33-codes/Event-Management",
       description:
-        "Role-based event system with secure authentication and CRUD APIs backed by SQLite.",
+        "A college event management portal for organizing campus events with secure login, file uploads, SQLite-backed storage, and animated UI built with modern web graphics libraries.",
       bullets: [
         "Built role-based features supporting 150+ active users with secure authentication and CRUD.",
         "Integrated a 2GB SQLite database; improved query response time by ~20%.",
         "Automated email notifications, reducing manual workload by 30%.",
-        "Designed modular backend architecture for scalability and maintainability.",
-        "Prevented SQL injection + unauthorized access with validation and security checks.",
+        "Added interactive UI with GSAP, Three.js, and particle animations for a polished event experience.",
+        "Enabled event media uploads and session-based access control with Express and Multer.",
       ],
-      tech: ["Node.js", "Express.js", "SQLite", "REST APIs"],
+      tech: ["Node.js", "Express.js", "EJS", "SQLite", "GSAP", "Three.js", "REST APIs"],
     },
     {
       title: "FoodiesHub",
-      subtitle: "Full Stack Web Application",
-      dates: "2025",
+      subtitle: "Food Ordering Platform",
+      dates: "2025 - 2026",
       repoUrl: "https://github.com/Laxmisathvikabhupathi33-codes/FoodiesHub",
       description:
-        "A food discovery and ordering platform connecting users with restaurants and local food options.",
+        "Full-stack food ordering platform with a React + TypeScript frontend and Node.js backend, featuring Google OAuth login, Cashfree payments, and deployment on Vercel and Render.",
       bullets: [
-        "Built a responsive web interface for browsing food options and restaurant listings.",
-        "Implemented user-facing features for exploring and interacting with food services.",
-        "Structured the project for scalable full-stack development with clean separation of concerns.",
+        "Built a responsive React + Vite + TypeScript UI with shadcn/ui and Tailwind CSS for browsing menus and placing orders.",
+        "Developed REST APIs with Express and MongoDB for users, restaurants, and order management.",
+        "Integrated Google OAuth for secure sign-in and Cashfree payment gateway for checkout.",
+        "Configured cloud deployment with separate frontend (Vercel) and backend (Render) environments.",
       ],
-      tech: ["HTML", "CSS", "JavaScript", "Node.js", "Express.js"],
+      tech: ["React", "TypeScript", "Vite", "Tailwind CSS", "Node.js", "Express.js", "MongoDB", "Google OAuth", "Cashfree"],
     },
   ];
 
@@ -504,7 +505,7 @@ export default function Home() {
           <SectionTitle
             kicker="Projects"
             title="Selected work"
-            description="Medical image classification and full-stack systems with measurable outcomes."
+            description="AI/ML research, college event systems, and full-stack web applications with real-world features."
           />
 
           <div className="grid gap-6">
