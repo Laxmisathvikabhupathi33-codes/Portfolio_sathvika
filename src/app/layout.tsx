@@ -13,6 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://portfolio-sathvika-ten.vercel.app"),
   title: "Laxmi Sathvika Bhupathi | AI Engineer Portfolio",
   description:
     "Aspiring AI Engineer portfolio showcasing projects in medical image classification and full-stack applications.",

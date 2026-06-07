@@ -2,7 +2,9 @@
 
 import type { ComponentPropsWithoutRef, PointerEvent, ReactNode } from "react";
 import { useRef } from "react";
+import Image from "next/image";
 import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
+import { ProfileShowcase } from "@/components/ProfileShowcase";
 
 function Chip({ children }: { children: ReactNode }) {
   const reduceMotion = useReducedMotion();
@@ -116,9 +118,9 @@ export default function Home() {
   const email = "sathvikabhupathi33@gmail.com";
   const location = "Mahabubabad, Telangana, India";
 
-  // TODO: Replace these with your actual profile URLs.
+  const liveSiteUrl = "https://portfolio-sathvika-ten.vercel.app";
   const linkedinUrl = "https://www.linkedin.com/";
-  const githubUrl = "https://github.com/";
+  const githubUrl = "https://github.com/Laxmisathvikabhupathi33-codes/Portfolio_sathvika";
 
   const summary =
     "Results-driven Computer Science student specializing in Artificial Intelligence and Machine Learning with hands-on experience building deep learning models and scalable full-stack applications. Developed AI systems achieving 92% accuracy and engineered backends supporting 150+ users with measurable performance improvements.";
@@ -196,8 +198,14 @@ export default function Home() {
       <header className="sticky top-0 z-40 border-b border-zinc-200/70 bg-zinc-50/80 backdrop-blur dark:border-zinc-800/70 dark:bg-black/70">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-200 font-semibold text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">
-              LS
+            <div className="relative h-10 w-10 overflow-hidden rounded-full ring-2 ring-emerald-500/30">
+              <Image
+                src="/profile.png"
+                alt={name}
+                fill
+                sizes="40px"
+                className="object-cover object-top"
+              />
             </div>
             <div className="leading-tight">
               <div className="text-sm font-semibold">{name}</div>
@@ -325,6 +333,9 @@ export default function Home() {
               <div>
                 <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">Links</div>
                 <div className="flex gap-3">
+                  <a className="font-semibold hover:underline" href={liveSiteUrl} target="_blank" rel="noreferrer">
+                    Website
+                  </a>
                   <a className="font-semibold hover:underline" href={linkedinUrl} target="_blank" rel="noreferrer">
                     LinkedIn
                   </a>
@@ -337,28 +348,12 @@ export default function Home() {
           </div>
 
           <div className="lg:col-span-5">
-            <TiltCard
-              className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800 relative overflow-hidden"
-              whileHover={reduceMotion ? undefined : { y: -4, scale: 1.01 }}
-              transition={reduceMotion ? undefined : { type: "spring", stiffness: 260, damping: 22 }}
-            >
-              <SectionTitle
-                kicker="At a glance"
-                title="What I’m working on"
-                description="AI systems, medical ML, and scalable web backends."
-              />
-              <div className="flex flex-wrap gap-2">
-                <Chip>Deep Learning</Chip>
-                <Chip>Medical Imaging</Chip>
-                <Chip>PyTorch</Chip>
-                <Chip>Explainable AI</Chip>
-                <Chip>REST APIs</Chip>
-                <Chip>SQLite</Chip>
-              </div>
-              <div className="mt-6 text-sm text-zinc-700 dark:text-zinc-200">
-                Currently focused on model optimization, data pipelines, and building production-ready backends.
-              </div>
-            </TiltCard>
+            <ProfileShowcase
+              name={name}
+              role={role}
+              portfolioUrl={liveSiteUrl}
+              githubUrl={githubUrl}
+            />
           </div>
         </motion.section>
 
