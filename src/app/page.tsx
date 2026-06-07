@@ -130,6 +130,7 @@ export default function Home() {
       title: "ViT-ResNet Fusion",
       subtitle: "Medical Image Classification",
       dates: "Dec 2025 - Feb 2026",
+      repoUrl: "",
       description:
         "Hybrid CNN + Transformer model for multi-class medical image classification with explainable AI.",
       bullets: [
@@ -145,6 +146,7 @@ export default function Home() {
       title: "Event Management Portal",
       subtitle: "Full Stack Web Application",
       dates: "May 2025 - Jun 2025",
+      repoUrl: "https://github.com/Laxmisathvikabhupathi33-codes/Event-Management",
       description:
         "Role-based event system with secure authentication and CRUD APIs backed by SQLite.",
       bullets: [
@@ -155,6 +157,20 @@ export default function Home() {
         "Prevented SQL injection + unauthorized access with validation and security checks.",
       ],
       tech: ["Node.js", "Express.js", "SQLite", "REST APIs"],
+    },
+    {
+      title: "FoodiesHub",
+      subtitle: "Full Stack Web Application",
+      dates: "2025",
+      repoUrl: "https://github.com/Laxmisathvikabhupathi33-codes/FoodiesHub",
+      description:
+        "A food discovery and ordering platform connecting users with restaurants and local food options.",
+      bullets: [
+        "Built a responsive web interface for browsing food options and restaurant listings.",
+        "Implemented user-facing features for exploring and interacting with food services.",
+        "Structured the project for scalable full-stack development with clean separation of concerns.",
+      ],
+      tech: ["HTML", "CSS", "JavaScript", "Node.js", "Express.js"],
     },
   ];
 
@@ -502,12 +518,30 @@ export default function Home() {
                 whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.25 }}
               >
-                <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <div>
                     <h3 className="text-xl font-semibold">{p.title}</h3>
                     <div className="mt-1 text-sm text-zinc-600 dark:text-zinc-300">{p.subtitle}</div>
                   </div>
-                  <div className="text-sm font-medium text-zinc-700 dark:text-zinc-200">{p.dates}</div>
+                  <div className="flex flex-col items-start gap-2 sm:items-end">
+                    <div className="text-sm font-medium text-zinc-700 dark:text-zinc-200">{p.dates}</div>
+                    {p.repoUrl ? (
+                      <motion.a
+                        href={p.repoUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex h-9 items-center justify-center rounded-full border border-zinc-200 bg-white px-4 text-sm font-semibold text-zinc-900 transition hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800"
+                        whileHover={reduceMotion ? undefined : { y: -2, scale: 1.02 }}
+                        transition={
+                          reduceMotion
+                            ? undefined
+                            : { type: "spring", stiffness: 260, damping: 20 }
+                        }
+                      >
+                        View on GitHub
+                      </motion.a>
+                    ) : null}
+                  </div>
                 </div>
                 <p className="mt-4 text-zinc-700 dark:text-zinc-200">{p.description}</p>
 
